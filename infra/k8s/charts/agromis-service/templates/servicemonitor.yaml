@@ -1,0 +1,16 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "agromis-service.fullname" . }}
+  labels:
+    {{- include "agromis-service.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "agromis-service.selectorLabels" . | nindent 6 }}
+  endpoints:
+    - port: http
+      path: {{ .Values.metrics.path }}
+      interval: 30s
+{{- end }}

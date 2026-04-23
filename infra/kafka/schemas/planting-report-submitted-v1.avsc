@@ -1,0 +1,17 @@
+{
+  "namespace": "io.agromis.events.farming",
+  "type": "record",
+  "name": "PlantingReportSubmitted",
+  "doc": "Evento emitido cuando un agricultor registra un reporte de siembra",
+  "fields": [
+    { "name": "report_id",    "type": "string",  "doc": "UUID v7 del reporte" },
+    { "name": "farmer_id",    "type": "string" },
+    { "name": "parcel_id",    "type": "string" },
+    { "name": "crop_code",    "type": "string",  "doc": "Codigo del cultivo del catalogo" },
+    { "name": "planting_date","type": "int",     "logicalType": "date", "doc": "Dias desde epoch" },
+    { "name": "area_hectares","type": "double" },
+    { "name": "h3_cell_r7",   "type": "string",  "doc": "Celda H3 resolucion 7 de la parcela" },
+    { "name": "country_code", "type": "string" },
+    { "name": "notes",        "type": ["null", "string"], "default": null }
+  ]
+}

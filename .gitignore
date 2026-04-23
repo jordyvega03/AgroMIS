@@ -1,0 +1,99 @@
+# ---- Java / Gradle ----
+target/
+build/
+.gradle/
+*.class
+*.jar
+*.war
+*.ear
+hs_err_pid*
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+env/
+dist/
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# ---- Flutter / Dart ----
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+flutter_*.png
+
+# ---- Node.js ----
+node_modules/
+.pnpm-store/
+dist/
+.next/
+.nuxt/
+.output/
+*.tsbuildinfo
+
+# ---- IDEs ----
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+*.suo
+*.user
+.vs/
+*.swp
+*.swo
+
+# ---- Terraform ----
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+*.tfplan
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# ---- Docker ----
+.docker/
+
+# ---- Secrets / Config local ----
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.jks
+*.keystore
+secrets/
+
+# ---- Logs ----
+*.log
+logs/
+
+# ---- OS ----
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# ---- Misc ----
+*.tmp
+*.bak
+*.orig
+.cache/

@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: agromis-staging
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - service: backend
+            namespace: agromis-staging
+          - service: projection-engine
+            namespace: agromis-staging
+
+  template:
+    metadata:
+      name: "agromis-staging-{{service}}"
+      namespace: argocd
+    spec:
+      project: agromis
+      source:
+        repoURL: https://github.com/agromis/agromis-platform
+        targetRevision: main
+        path: "infra/k8s/apps/{{service}}"
+        helm:
+          valueFiles:
+            - values-staging.yaml
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "{{namespace}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+      notifications:
+        triggers:
+          - on-deployed
+          - on-sync-failed
+          - on-health-degraded

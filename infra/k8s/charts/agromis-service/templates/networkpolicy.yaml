@@ -1,0 +1,61 @@
+{{- if .Values.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "agromis-service.fullname" . }}
+  labels:
+    {{- include "agromis-service.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "agromis-service.selectorLabels" . | nindent 6 }}
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Trafico desde ingress controller
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8080
+    # Trafico desde Prometheus (scraping de metricas)
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: monitoring
+      ports:
+        - protocol: TCP
+          port: 8080
+    # Trafico desde servicios del mismo namespace
+    - from:
+        - podSelector: {}
+  egress:
+    # DNS
+    - ports:
+        - protocol: UDP
+          port: 53
+    # PostgreSQL
+    - ports:
+        - protocol: TCP
+          port: 5432
+    # Redis
+    - ports:
+        - protocol: TCP
+          port: 6379
+    # Redpanda/Kafka
+    - ports:
+        - protocol: TCP
+          port: 9092
+    # Keycloak OIDC
+    - ports:
+        - protocol: TCP
+          port: 8081
+        - protocol: TCP
+          port: 443
+    # Servicios del mismo namespace
+    - to:
+        - podSelector: {}
+{{- end }}

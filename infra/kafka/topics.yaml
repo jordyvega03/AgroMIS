@@ -1,0 +1,102 @@
+# Declaracion de topics de Redpanda para AgroMIS
+# Aplicar con: ./create-topics.sh local | staging | production
+
+topics:
+  - name: agromis.reports.planting.v1
+    partitions:
+      local: 3
+      staging: 6
+      production: 24
+    replication_factor:
+      local: 1
+      staging: 3
+      production: 3
+    config:
+      retention.ms: "2592000000"   # 30 dias
+      compression.type: lz4
+
+  - name: agromis.projections.updated.v1
+    partitions:
+      local: 3
+      staging: 6
+      production: 12
+    replication_factor:
+      local: 1
+      staging: 3
+      production: 3
+    config:
+      retention.ms: "7776000000"   # 90 dias
+      cleanup.policy: compact,delete
+
+  - name: agromis.prices.observed.v1
+    partitions:
+      local: 3
+      staging: 6
+      production: 12
+    replication_factor:
+      local: 1
+      staging: 3
+      production: 3
+    config:
+      retention.ms: "2592000000"   # 30 dias
+
+  - name: agromis.weather.observed.v1
+    partitions:
+      local: 3
+      staging: 6
+      production: 12
+    replication_factor:
+      local: 1
+      staging: 3
+      production: 3
+    config:
+      retention.ms: "1209600000"   # 14 dias
+
+  - name: agromis.reputation.changed.v1
+    partitions:
+      local: 3
+      staging: 3
+      production: 6
+    replication_factor:
+      local: 1
+      staging: 3
+      production: 3
+    config:
+      cleanup.policy: compact
+
+  - name: agromis.notifications.dispatch.v1
+    partitions:
+      local: 3
+      staging: 6
+      production: 24
+    replication_factor:
+      local: 1
+      staging: 3
+      production: 3
+    config:
+      retention.ms: "604800000"   # 7 dias
+
+  # DLQ por cada topic principal
+  - name: agromis.reports.planting.v1.dlq
+    partitions:
+      local: 1
+      staging: 3
+      production: 3
+    replication_factor:
+      local: 1
+      staging: 3
+      production: 3
+    config:
+      retention.ms: "2592000000"
+
+  - name: agromis.prices.observed.v1.dlq
+    partitions:
+      local: 1
+      staging: 3
+      production: 3
+    replication_factor:
+      local: 1
+      staging: 3
+      production: 3
+    config:
+      retention.ms: "2592000000"

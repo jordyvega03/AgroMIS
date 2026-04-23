@@ -1,0 +1,16 @@
+{
+  "namespace": "io.agromis.events",
+  "type": "record",
+  "name": "EventEnvelope",
+  "doc": "Envelope comun para todos los eventos de dominio de AgroMIS",
+  "fields": [
+    { "name": "event_id",       "type": "string",  "doc": "UUID v7 del evento" },
+    { "name": "event_type",     "type": "string",  "doc": "Tipo del evento ej. PlantingReportSubmitted" },
+    { "name": "event_version",  "type": "string",  "default": "v1" },
+    { "name": "occurred_at",    "type": "long",    "logicalType": "timestamp-millis", "doc": "Epoch ms UTC" },
+    { "name": "country_code",   "type": "string",  "doc": "Codigo ISO-2 del pais" },
+    { "name": "tenant_id",      "type": "string" },
+    { "name": "correlation_id", "type": ["null", "string"], "default": null },
+    { "name": "payload",        "type": "string",  "doc": "JSON del payload especifico del evento" }
+  ]
+}

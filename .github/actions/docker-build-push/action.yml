@@ -1,0 +1,46 @@
+name: Docker Build & Push to ECR
+description: Construye imagen Docker y la publica en ECR con multi-platform
+
+inputs:
+  service:
+    required: true
+  context:
+    required: true
+  dockerfile:
+    required: true
+  aws-region:
+    required: true
+    default: us-east-1
+  ecr-repository:
+    required: true
+  image-tag:
+    required: true
+  aws-role-arn:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ inputs.aws-role-arn }}
+        aws-region: ${{ inputs.aws-region }}
+
+    - uses: aws-actions/amazon-ecr-login@v2
+      id: login-ecr
+
+    - uses: docker/setup-buildx-action@v3
+
+    - uses: docker/build-push-action@v5
+      with:
+        context: ${{ inputs.context }}
+        file: ${{ inputs.dockerfile }}
+        push: true
+        platforms: linux/amd64,linux/arm64
+        tags: |
+          ${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecr-repository }}:${{ inputs.image-tag }}
+          ${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecr-repository }}:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        provenance: true
+        sbom: true

@@ -1,0 +1,49 @@
+name: Load Tests (semanal)
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"   # Lunes 6am UTC
+  workflow_dispatch:
+    inputs:
+      scenario:
+        description: "Escenario a correr (submit-report|get-projection|query-gis-tiles|all)"
+        default: all
+
+jobs:
+  load-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: grafana/setup-k6-action@v1
+
+      - name: Correr load tests
+        env:
+          API_URL: ${{ vars.STAGING_API_URL }}
+          KEYCLOAK_URL: ${{ vars.STAGING_KEYCLOAK_URL }}
+          KC_REALM: agromis
+          TEST_USERNAME: ${{ secrets.LOAD_TEST_USERNAME }}
+          TEST_PASSWORD: ${{ secrets.LOAD_TEST_PASSWORD }}
+        run: |
+          SCENARIO="${{ github.event.inputs.scenario || 'all' }}"
+
+          if [ "$SCENARIO" = "all" ] || [ "$SCENARIO" = "submit-report" ]; then
+            k6 run tests/load/scenarios/submit-report.js \
+              --out json=results-submit.json
+          fi
+
+          if [ "$SCENARIO" = "all" ] || [ "$SCENARIO" = "get-projection" ]; then
+            k6 run tests/load/scenarios/get-projection.js \
+              --out json=results-projection.json
+          fi
+
+          if [ "$SCENARIO" = "all" ] || [ "$SCENARIO" = "query-gis-tiles" ]; then
+            k6 run tests/load/scenarios/query-gis-tiles.js \
+              --out json=results-tiles.json
+          fi
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: k6-results-${{ github.run_id }}
+          path: results-*.json
