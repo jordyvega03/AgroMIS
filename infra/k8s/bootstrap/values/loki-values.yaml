@@ -1,0 +1,24 @@
+loki:
+  auth_enabled: false
+  storage:
+    type: s3
+    bucketNames:
+      chunks: agromis-loki-chunks
+      ruler: agromis-loki-ruler
+    s3:
+      region: us-east-1
+  commonConfig:
+    replication_factor: 1
+
+deploymentMode: SingleBinary
+
+singleBinary:
+  replicas: 1
+  persistence:
+    enabled: true
+    size: 20Gi
+
+monitoring:
+  serviceMonitor:
+    enabled: true
+    namespace: monitoring

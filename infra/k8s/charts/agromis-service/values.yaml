@@ -1,0 +1,97 @@
+image:
+  repository: ""
+  tag: ""
+  pullPolicy: IfNotPresent
+
+replicas: 2
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+
+# Variables de entorno directas
+env: {}
+
+# Valores para el ConfigMap
+config: {}
+
+# Secrets referenciados por nombre (External Secrets los crea)
+secretEnvFrom: []
+
+service:
+  port: 8080
+  targetPort: 8080
+
+ingress:
+  enabled: false
+  className: nginx
+  host: ""
+  path: /
+  pathType: Prefix
+  tls: []
+
+serviceAccount:
+  create: true
+  annotations: {}
+
+hpa:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1001
+  fsGroup: 1001
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+# Probes Quarkus
+livenessProbe:
+  httpGet:
+    path: /q/health/live
+    port: 8080
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /q/health/ready
+    port: 8080
+  initialDelaySeconds: 20
+  periodSeconds: 5
+  failureThreshold: 3
+
+startupProbe:
+  httpGet:
+    path: /q/health/started
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  failureThreshold: 30
+
+# Prometheus ServiceMonitor
+metrics:
+  enabled: true
+  path: /q/metrics
+  port: 8080
+
+# PodDisruptionBudget
+pdb:
+  enabled: true
+  minAvailable: 1
+
+# NetworkPolicy
+networkPolicy:
+  enabled: true

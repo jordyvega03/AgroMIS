@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: agromis
+  namespace: argocd
+spec:
+  description: Proyecto AgroMIS — todos los servicios
+
+  sourceRepos:
+    - https://github.com/agromis/agromis-platform
+
+  destinations:
+    - namespace: agromis-staging
+      server: https://kubernetes.default.svc
+    - namespace: agromis-production
+      server: https://kubernetes.default.svc
+
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+
+  namespaceResourceWhitelist:
+    - group: "*"
+      kind: "*"
+
+  roles:
+    - name: developer
+      policies:
+        - p, proj:agromis:developer, applications, get, agromis/*, allow
+        - p, proj:agromis:developer, applications, sync, agromis/staging-*, allow
+
+    - name: sre
+      policies:
+        - p, proj:agromis:sre, applications, *, agromis/*, allow

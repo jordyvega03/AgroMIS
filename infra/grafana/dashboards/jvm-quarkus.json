@@ -1,0 +1,47 @@
+{
+  "title": "AgroMIS — JVM Quarkus",
+  "uid": "agromis-jvm-quarkus",
+  "version": 1,
+  "schemaVersion": 39,
+  "tags": ["agromis", "jvm", "quarkus"],
+  "panels": [
+    {
+      "title": "JVM Heap Used (MB)",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+      "targets": [{
+        "expr": "jvm_memory_used_bytes{area=\"heap\",service=~\"agromis.*\"} / 1024 / 1024",
+        "legendFormat": "{{ service }} {{ id }}"
+      }]
+    },
+    {
+      "title": "GC Pause Time (ms/s)",
+      "type": "timeseries",
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
+      "targets": [{
+        "expr": "rate(jvm_gc_pause_seconds_sum{service=~\"agromis.*\"}[1m]) * 1000",
+        "legendFormat": "{{ cause }}"
+      }]
+    },
+    {
+      "title": "Threads activos",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
+      "targets": [{
+        "expr": "jvm_threads_live_threads{service=~\"agromis.*\"}",
+        "legendFormat": "{{ service }}"
+      }]
+    },
+    {
+      "title": "DB Connection Pool",
+      "type": "timeseries",
+      "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
+      "targets": [{
+        "expr": "agropool_connections_active{service=~\"agromis.*\"}",
+        "legendFormat": "{{ service }} active"
+      }]
+    }
+  ],
+  "refresh": "30s",
+  "time": { "from": "now-1h", "to": "now" }
+}

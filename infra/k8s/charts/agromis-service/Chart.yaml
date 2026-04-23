@@ -1,0 +1,13 @@
+apiVersion: v2
+name: agromis-service
+description: Chart Helm generico para servicios Quarkus de AgroMIS
+type: application
+version: 0.1.0
+appVersion: "0.0.1"
+keywords:
+  - agromis
+  - quarkus
+  - java
+maintainers:
+  - name: AgroMIS SRE
+    email: sre@agromis.io

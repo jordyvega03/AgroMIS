@@ -1,0 +1,27 @@
+trivy:
+  ignoreUnfixed: false
+  severity: CRITICAL,HIGH,MEDIUM
+  timeout: "10m0s"
+
+operator:
+  scanJobTimeout: 10m
+  vulnerabilityScannerEnabled: true
+  configAuditScannerEnabled: true
+  rbacAssessmentScannerEnabled: true
+  exposedSecretScannerEnabled: true
+  scanNamespaces: ""   # vacio = todos los namespaces
+
+serviceMonitor:
+  enabled: true
+  namespace: monitoring
+  labels:
+    app: kube-prometheus-stack
+    release: kube-prometheus-stack
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi

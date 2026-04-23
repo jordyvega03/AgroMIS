@@ -1,0 +1,58 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    labels:
+      - dependencies
+      - ci
+
+  - package-ecosystem: gradle
+    directory: /backend
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+      - backend
+
+  - package-ecosystem: pip
+    directory: /projection-engine
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+      - ml
+
+  - package-ecosystem: flutter
+    directory: /mobile
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+      - mobile
+
+  - package-ecosystem: npm
+    directory: /web
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+      - frontend
+
+  - package-ecosystem: terraform
+    directory: /infra/terraform/environments/staging
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+      - infra
+
+  - package-ecosystem: docker
+    directory: /infra/docker
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+      - infra

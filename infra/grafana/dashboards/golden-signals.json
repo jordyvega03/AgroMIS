@@ -1,0 +1,68 @@
+{
+  "title": "AgroMIS — Golden Signals",
+  "uid": "agromis-golden-signals",
+  "version": 1,
+  "schemaVersion": 39,
+  "tags": ["agromis", "golden-signals"],
+  "templating": {
+    "list": [
+      {
+        "name": "service",
+        "type": "query",
+        "query": "label_values(http_server_requests_seconds_count{namespace=~\"agromis.*\"}, service)",
+        "multi": true,
+        "includeAll": true
+      }
+    ]
+  },
+  "panels": [
+    {
+      "title": "Request Rate (RPS)",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+      "targets": [{
+        "expr": "sum(rate(http_server_requests_seconds_count{service=~\"$service\"}[1m])) by (service)",
+        "legendFormat": "{{ service }}"
+      }]
+    },
+    {
+      "title": "Error Rate (%)",
+      "type": "timeseries",
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
+      "targets": [{
+        "expr": "sum(rate(http_server_requests_seconds_count{service=~\"$service\",status=~\"5..\"}[1m])) by (service) / sum(rate(http_server_requests_seconds_count{service=~\"$service\"}[1m])) by (service) * 100",
+        "legendFormat": "{{ service }}"
+      }]
+    },
+    {
+      "title": "Latencia p50 / p95 / p99 (ms)",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.50, rate(http_server_requests_seconds_bucket{service=~\"$service\"}[5m])) * 1000",
+          "legendFormat": "p50"
+        },
+        {
+          "expr": "histogram_quantile(0.95, rate(http_server_requests_seconds_bucket{service=~\"$service\"}[5m])) * 1000",
+          "legendFormat": "p95"
+        },
+        {
+          "expr": "histogram_quantile(0.99, rate(http_server_requests_seconds_bucket{service=~\"$service\"}[5m])) * 1000",
+          "legendFormat": "p99"
+        }
+      ]
+    },
+    {
+      "title": "Saturacion CPU (%)",
+      "type": "timeseries",
+      "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
+      "targets": [{
+        "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=~\"agromis.*\",container!=\"\"}[5m])) by (pod) / sum(container_spec_cpu_quota{namespace=~\"agromis.*\",container!=\"\"} / container_spec_cpu_period{namespace=~\"agromis.*\",container!=\"\"}) by (pod) * 100",
+        "legendFormat": "{{ pod }}"
+      }]
+    }
+  ],
+  "refresh": "30s",
+  "time": { "from": "now-1h", "to": "now" }
+}

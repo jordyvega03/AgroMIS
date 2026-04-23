@@ -1,0 +1,62 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: kube-bench
+  namespace: kube-system
+spec:
+  schedule: "0 4 * * 1"   # Lunes 4am UTC
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          hostPID: true
+          hostIPC: true
+          hostNetwork: true
+          restartPolicy: Never
+          containers:
+            - name: kube-bench
+              image: aquasec/kube-bench:latest
+              command: ["kube-bench"]
+              args:
+                - run
+                - --targets
+                - master,node,etcd,policies
+                - --json
+              volumeMounts:
+                - name: var-lib-etcd
+                  mountPath: /var/lib/etcd
+                  readOnly: true
+                - name: var-lib-kubelet
+                  mountPath: /var/lib/kubelet
+                  readOnly: true
+                - name: etc-systemd
+                  mountPath: /etc/systemd
+                  readOnly: true
+                - name: etc-kubernetes
+                  mountPath: /etc/kubernetes
+                  readOnly: true
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+                limits:
+                  cpu: 500m
+                  memory: 256Mi
+              securityContext:
+                privileged: true
+          volumes:
+            - name: var-lib-etcd
+              hostPath:
+                path: /var/lib/etcd
+            - name: var-lib-kubelet
+              hostPath:
+                path: /var/lib/kubelet
+            - name: etc-systemd
+              hostPath:
+                path: /etc/systemd
+            - name: etc-kubernetes
+              hostPath:
+                path: /etc/kubernetes
+          tolerations:
+            - operator: Exists

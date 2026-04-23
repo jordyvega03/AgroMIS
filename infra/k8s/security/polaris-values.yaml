@@ -1,0 +1,41 @@
+config:
+  checks:
+    # Contenedores
+    cpuRequestsMissing: warning
+    cpuLimitsMissing: warning
+    memoryRequestsMissing: warning
+    memoryLimitsMissing: warning
+    readinessProbeMissing: warning
+    livenessProbeMissing: warning
+    tagNotSpecified: danger
+    pullPolicyNotAlways: ignore
+    hostIPCSet: danger
+    hostPIDSet: danger
+    hostPortSet: warning
+    runAsRootAllowed: danger
+    privilegeEscalationAllowed: danger
+    insecureCapabilities: danger
+    hostNetworkSet: warning
+    readOnlyRootFilesystem: warning
+
+dashboard:
+  enabled: true
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - polaris.agromis.io
+    tls:
+      - secretName: polaris-tls
+        hosts:
+          - polaris.agromis.io
+
+webhook:
+  enabled: true
+  mutate: false   # solo auditar, no bloquear en staging
+
+serviceMonitor:
+  enabled: true
+  namespace: monitoring

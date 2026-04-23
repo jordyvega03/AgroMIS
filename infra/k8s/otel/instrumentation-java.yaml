@@ -1,0 +1,31 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: agromis-java
+  namespace: agromis-staging
+spec:
+  exporter:
+    endpoint: http://otel-collector.monitoring:4317
+
+  propagators:
+    - tracecontext
+    - baggage
+    - b3
+
+  sampler:
+    type: parentbased_traceidratio
+    argument: "1.0"   # 100% en staging; reducir en prod
+
+  java:
+    image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-java:latest
+    env:
+      - name: OTEL_SERVICE_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.labels['app.kubernetes.io/name']
+      - name: OTEL_LOGS_EXPORTER
+        value: otlp
+      - name: OTEL_METRICS_EXPORTER
+        value: otlp
+      - name: OTEL_TRACES_EXPORTER
+        value: otlp

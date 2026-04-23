@@ -1,0 +1,79 @@
+{
+  "realm": "agromis",
+  "displayName": "AgroMIS",
+  "enabled": true,
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": true,
+  "accessTokenLifespan": 300,
+  "refreshTokenMaxReuse": 0,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "clients": [
+    {
+      "clientId": "agromis-backend",
+      "name": "AgroMIS Backend",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "agromis-backend-secret-dev",
+      "bearerOnly": false,
+      "publicClient": false,
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "protocol": "openid-connect"
+    },
+    {
+      "clientId": "agromis-mobile",
+      "name": "AgroMIS Mobile",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": ["agromis://callback", "http://localhost:*"],
+      "webOrigins": ["*"],
+      "protocol": "openid-connect"
+    },
+    {
+      "clientId": "agromis-web",
+      "name": "AgroMIS Web",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "redirectUris": ["http://localhost:3000/*"],
+      "webOrigins": ["http://localhost:3000"],
+      "protocol": "openid-connect"
+    }
+  ],
+  "roles": {
+    "realm": [
+      {"name": "farmer", "description": "Agricultor registrado"},
+      {"name": "extension_worker", "description": "Tecnico extensionista"},
+      {"name": "cooperative_admin", "description": "Administrador de cooperativa"},
+      {"name": "ministry_analyst", "description": "Analista de ministerio"},
+      {"name": "platform_admin", "description": "Administrador de plataforma"},
+      {"name": "researcher", "description": "Investigador con acceso a datos anonimizados"}
+    ]
+  },
+  "users": [
+    {
+      "username": "dev-farmer",
+      "email": "farmer@agromis.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [{"type": "password", "value": "dev123", "temporary": false}],
+      "realmRoles": ["farmer"]
+    },
+    {
+      "username": "dev-admin",
+      "email": "admin@agromis.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [{"type": "password", "value": "dev123", "temporary": false}],
+      "realmRoles": ["platform_admin"]
+    }
+  ]
+}

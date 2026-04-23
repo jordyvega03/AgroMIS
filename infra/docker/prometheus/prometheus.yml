@@ -1,0 +1,35 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    environment: local
+
+rule_files: []
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  - job_name: agromis-backend
+    metrics_path: /q/metrics
+    static_configs:
+      - targets: ["host.docker.internal:8080"]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+
+  - job_name: redpanda
+    static_configs:
+      - targets: ["redpanda:9644"]
+    metrics_path: /metrics
+
+  - job_name: loki
+    static_configs:
+      - targets: ["loki:3100"]
+    metrics_path: /metrics
+
+  - job_name: tempo
+    static_configs:
+      - targets: ["tempo:3200"]
+    metrics_path: /metrics

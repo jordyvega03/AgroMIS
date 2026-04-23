@@ -1,0 +1,18 @@
+tempo:
+  storage:
+    trace:
+      backend: s3
+      s3:
+        bucket: agromis-tempo-traces
+        region: us-east-1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+
+serviceMonitor:
+  enabled: true
+  namespace: monitoring

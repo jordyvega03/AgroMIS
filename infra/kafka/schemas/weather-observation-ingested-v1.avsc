@@ -1,0 +1,18 @@
+{
+  "namespace": "io.agromis.events.weather",
+  "type": "record",
+  "name": "WeatherObservationIngested",
+  "doc": "Evento emitido cuando se ingresa una observacion meteorologica",
+  "fields": [
+    { "name": "observation_id",     "type": "string" },
+    { "name": "station_id",         "type": "string" },
+    { "name": "country_code",       "type": "string" },
+    { "name": "h3_cell_r7",         "type": "string" },
+    { "name": "observed_at",        "type": "long",   "logicalType": "timestamp-millis" },
+    { "name": "temperature_c",      "type": ["null", "float"], "default": null },
+    { "name": "humidity_pct",       "type": ["null", "float"], "default": null },
+    { "name": "precipitation_mm",   "type": ["null", "float"], "default": null },
+    { "name": "wind_speed_kmh",     "type": ["null", "float"], "default": null },
+    { "name": "source",             "type": "string",  "doc": "IOT | MANUAL | NOAA | INSIVUMEH" }
+  ]
+}

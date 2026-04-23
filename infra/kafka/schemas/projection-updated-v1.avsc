@@ -1,0 +1,18 @@
+{
+  "namespace": "io.agromis.events.projection",
+  "type": "record",
+  "name": "ProjectionUpdated",
+  "doc": "Evento emitido cuando el motor de proyecciones actualiza una estimacion de cosecha",
+  "fields": [
+    { "name": "projection_id",   "type": "string" },
+    { "name": "crop_code",       "type": "string" },
+    { "name": "country_code",    "type": "string" },
+    { "name": "h3_cell",         "type": "string",  "doc": "Celda H3 de la proyeccion (resolucion variable)" },
+    { "name": "h3_resolution",   "type": "int" },
+    { "name": "harvest_date_est","type": "int",     "logicalType": "date" },
+    { "name": "quantity_kg_est", "type": "double" },
+    { "name": "confidence",      "type": "float",   "doc": "0.0 - 1.0" },
+    { "name": "model_version",   "type": "string" },
+    { "name": "generated_at",    "type": "long",    "logicalType": "timestamp-millis" }
+  ]
+}

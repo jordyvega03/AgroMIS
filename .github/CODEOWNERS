@@ -1,0 +1,33 @@
+# CODEOWNERS — propietarios por carpeta
+# Reemplaza @placeholder con usuarios reales de GitHub
+
+# Default owner para todo lo que no tenga regla especifica
+*                           @agromis-team/core
+
+# Backend Quarkus
+/backend/                   @agromis-team/backend
+
+# Motor de proyecciones Python
+/projection-engine/         @agromis-team/data
+
+# Mobile Flutter
+/mobile/                    @agromis-team/mobile
+
+# Frontend React
+/web/                       @agromis-team/frontend
+
+# Infraestructura — requiere aprobacion del equipo SRE
+/infra/                     @agromis-team/sre
+/infra/terraform/           @agromis-team/sre
+/infra/k8s/                 @agromis-team/sre
+/.github/workflows/         @agromis-team/sre
+
+# Documentacion de arquitectura
+/docs/architecture/         @agromis-team/architects
+/docs/adr/                  @agromis-team/architects
+
+# Runbooks
+/docs/runbooks/             @agromis-team/sre
+
+# Tests de carga
+/tests/                     @agromis-team/sre @agromis-team/backend

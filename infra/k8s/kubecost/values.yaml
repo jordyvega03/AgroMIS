@@ -1,0 +1,45 @@
+kubecostToken: ""   # Obtener en kubecost.com (free tier disponible)
+
+global:
+  prometheus:
+    enabled: false
+    fqdn: http://kube-prometheus-stack-prometheus.monitoring:9090
+
+  grafana:
+    enabled: false
+    proxy: false
+    domainName: grafana.agromis.io
+
+kubecostFrontend:
+  enabled: true
+  image:
+    tag: prod-2.0
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: kubecost.agromis.io
+      paths:
+        - /
+  tls:
+    - secretName: kubecost-tls
+      hosts:
+        - kubecost.agromis.io
+
+serviceMonitor:
+  enabled: true
+  namespace: monitoring
+
+reporting:
+  productAnalytics: false   # Sin telemetria a Kubecost
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi

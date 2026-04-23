@@ -1,0 +1,18 @@
+{
+  "namespace": "io.agromis.events.market",
+  "type": "record",
+  "name": "PriceObserved",
+  "doc": "Evento emitido cuando se registra un precio de mercado",
+  "fields": [
+    { "name": "observation_id",  "type": "string" },
+    { "name": "crop_code",       "type": "string" },
+    { "name": "market_id",       "type": "string" },
+    { "name": "country_code",    "type": "string" },
+    { "name": "price_per_unit",  "type": "double" },
+    { "name": "currency_code",   "type": "string" },
+    { "name": "unit",            "type": "string",  "doc": "KG | QUINTAL | DOCENA | etc." },
+    { "name": "quality_grade",   "type": ["null", "string"], "default": null, "doc": "A | B | C" },
+    { "name": "observed_at",     "type": "long",    "logicalType": "timestamp-millis" },
+    { "name": "source",          "type": "string",  "doc": "MANUAL | IOT | SCRAPER | API" }
+  ]
+}

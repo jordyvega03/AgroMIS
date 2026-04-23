@@ -1,0 +1,15 @@
+autoDiscovery:
+  clusterName: agromis-staging-cluster
+awsRegion: us-east-1
+extraArgs:
+  balance-similar-node-groups: "true"
+  skip-nodes-with-system-pods: "false"
+  scale-down-delay-after-add: 5m
+  scale-down-unneeded-time: 5m
+serviceMonitor:
+  enabled: true
+  namespace: monitoring
+rbac:
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: "" # Reemplazar con el ARN del rol IRSA del autoscaler
