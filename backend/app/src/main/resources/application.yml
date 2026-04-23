@@ -1,0 +1,64 @@
+quarkus:
+  application:
+    name: agromis-backend
+
+  datasource:
+    db-kind: postgresql
+    username: ${QUARKUS_DATASOURCE_USERNAME:agromis}
+    password: ${QUARKUS_DATASOURCE_PASSWORD:agromis_dev_pass}
+    jdbc:
+      url: ${QUARKUS_DATASOURCE_JDBC_URL:jdbc:postgresql://localhost:5433/agromis}
+      max-size: 20
+      min-size: 5
+
+  flyway:
+    migrate-at-start: true
+    locations: classpath:db/migration
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:19092}
+
+  oidc:
+    enabled: true
+    auth-server-url: ${OIDC_AUTH_SERVER_URL:http://localhost:8081/realms/agromis}
+    client-id: agromis-service
+    application-type: service
+
+  redis:
+    hosts: ${REDIS_URL:redis://localhost:6379}
+
+  http:
+    port: 8080
+    cors:
+      ~: true
+      origins: ${HTTP_CORS_ORIGINS:http://localhost:3000}
+
+  opentelemetry:
+    enabled: true
+    tracer:
+      exporter:
+        otlp:
+          endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT:http://localhost:4317}
+
+  smallrye-health:
+    root-path: /q/health
+
+  swagger-ui:
+    always-include: true
+
+"%dev":
+  quarkus:
+    oidc:
+      enabled: false
+    log:
+      level: INFO
+      category:
+        "gt.agromis":
+          level: DEBUG
+
+"%test":
+  quarkus:
+    oidc:
+      enabled: false
+    flyway:
+      migrate-at-start: false
